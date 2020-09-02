@@ -1,0 +1,5 @@
+GET http://localhost:5000/permutation?id=8
+Response: 20,19,21
+
+GET http://localhost:5000/store?numbers=19,20,21
+Response: 8
