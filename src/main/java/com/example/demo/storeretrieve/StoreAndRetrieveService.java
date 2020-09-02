@@ -6,14 +6,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 
 import org.springframework.stereotype.Service;
+
+import com.example.demo.persistence.StoreRepository;
+import com.example.demo.persistence.StoreEntity;
 
 import lombok.Data;
 
@@ -22,6 +27,9 @@ public class StoreAndRetrieveService {
 	
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
+	
+	@Autowired
+	StoreRepository repository;
 	
 	public static final String IN_MEMORY_PROFILE="InMemory";
 	
@@ -42,6 +50,11 @@ public class StoreAndRetrieveService {
 		if(activeProfile.equals(IN_MEMORY_PROFILE)) {			
 			
 			counterNumbersMap.put(i,inputArrayOfNumbers);
+		}else {
+			StoreEntity storeEntity= new StoreEntity();
+			storeEntity.setKey(i);
+			storeEntity.setValue(inputArrayOfNumbers);
+			repository.save(storeEntity);
 		}
 		
 		return i;
@@ -53,12 +66,18 @@ public class StoreAndRetrieveService {
 		
 		if(activeProfile.equals(IN_MEMORY_PROFILE)) {
 			valueRead= counterNumbersMap.get(id);
+		}else {
+			//valueRead=repository.getOne(id).getValue();
+			Optional<StoreEntity> optional= repository.findById(id);
+			if(optional.isPresent()) {
+				valueRead=optional.get().getValue();
+				System.out.println(valueRead);
+			}
+			else {
+				throw new IdNotFoundException("Id not found Exception");
+			}
 		}
 		
-		
-		if(valueRead == null) {
-			throw new IdNotFoundException("Id not found Exception");
-		}
 		
 		String[] stringArrayOfNumbers= valueRead.split(",");
 		

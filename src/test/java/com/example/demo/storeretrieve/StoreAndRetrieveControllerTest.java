@@ -21,10 +21,21 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.example.demo.DemoApplication;
 
+
+/**
+* <h1>Controller Test using MockMvc</h1>
+Tests the controller layer". 
+*
+* @author  Lakshmanan Perichiappan
+* @version 1.0
+* @since   09.02.2020 
+*/
+
+
 @SpringBootTest(classes=DemoApplication.class)
 @Tag("integration-test")
 @AutoConfigureMockMvc
-class StoreAndRetrieveControllerTest {
+public class StoreAndRetrieveControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -33,6 +44,10 @@ class StoreAndRetrieveControllerTest {
 	String testString2="76";
 	String testString3="46,43,21,29,23,22,12,28,23,102,21,10000";
 	
+	/**
+	  	 * This test checks if the correct exception is returned when the input parameter id is invalid for permutation API.  
+		 * @throws Exception.  
+	*/
 	@Test
 	void checkPermutationNotFoundException() throws Exception{
 		
@@ -40,6 +55,11 @@ class StoreAndRetrieveControllerTest {
 		assertEquals("Id not found Exception", mvcResult.getResolvedException().getMessage());
 		assertEquals(HttpStatus.NOT_FOUND.value(), mvcResult.getResponse().getStatus());
 	}
+	
+	/**
+	 * This test checks if the correct exception is returned when the input string of digits is invalid for store API
+	 * @throws Exception. 
+	*/
 	
 	@Test
 	void checkStoreBadRequestException() throws Exception{
@@ -49,7 +69,14 @@ class StoreAndRetrieveControllerTest {
 		assertEquals(HttpStatus.BAD_REQUEST.value(), mvcResult.getResponse().getStatus());
 	}
 	
-
+	/**
+	 * This test first calls the "store" endpoint and then the "permutation" endpoint and compares if the data is stored 
+	 * and retrieved correctly. 
+	 * The retrieved digits is compared with the test string as the ordering can be shuffled according to requirements
+	 *  
+	 *  This test has a input of 12 digits. 
+	 * @throws Exception
+	 */
 	
 	@Test
 	void storeAndRetrieveTestForSize12() throws Exception {
@@ -89,6 +116,15 @@ class StoreAndRetrieveControllerTest {
 				});
 	}
 	
+	/**
+	 * This test first calls the "store" endpoint and then the "permutation" endpoint and compares if the data is stored 
+	 * and retrieved correctly. 
+	 * The retrieved digits is compared with the test string as the ordering can be shuffled according to requirements
+	 * 
+	 *  
+	 *  This test has a input of 6 digits. 
+	 *  
+	*/
 	@Test
 	void storeAndRetrieveTestForSize6() throws Exception {
 
@@ -127,6 +163,16 @@ class StoreAndRetrieveControllerTest {
 				});
 	}
 	
+	/**
+	 * This test first calls the "store" endpoint and then the "permutation" endpoint and compares if the data is stored 
+	 * and retrieved correctly. 
+	 * The retrieved digits is compared with the test string as the ordering can be shuffled according to requirements
+	 * @param storeAndRetrieveTestForSize1
+	 
+	 *  
+	 *  This test has a input of 1 digit. 
+	 *  
+	*/	
 	@Test
 	void storeAndRetrieveTestForSize1() throws Exception {
 
@@ -164,5 +210,8 @@ class StoreAndRetrieveControllerTest {
 
 				});
 	}
+	
+	
+	
 
 }

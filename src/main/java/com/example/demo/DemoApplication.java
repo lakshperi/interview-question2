@@ -2,9 +2,10 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.google.common.base.Predicate;
 
@@ -17,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableSwagger2
+@ComponentScan(basePackages = {"com.example.demo.persistence","com.example.demo.storeretrieve"})  
 public class DemoApplication {
 
     public static void main(String[] args) {
