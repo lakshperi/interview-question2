@@ -13,7 +13,8 @@ import org.springframework.test.context.TestPropertySource;
 
 /**
 * <h1>Services Test</h1>
-Tests the services layer with the spring profile of "InMemory". 
+* Integration Tests the services layer with the spring profile of "InMemory" and Conditional bean of  
+* "persistence.store=InMemory"
 *
 * @author  Lakshmanan Perichiappan
 * @version 1.0
@@ -22,30 +23,15 @@ Tests the services layer with the spring profile of "InMemory".
 
 
 @SpringBootTest
-@ActiveProfiles({ "InMemory" })
 @TestPropertySource(properties = {
-	    "spring.profiles.active=InMemory",
+	    "persistence.store=InMemory", "spring.profiles.active=InMemory"
 	})
 public class StoreAndRetrieveServiceTest {
 	
-	@Value("${spring.profiles.active}")
-	private String activeProfile;
-	
 	String testString1="1,2,3,4";
 	String testString2="6,7,8,9";
-	StoreAndRetrieveService service=new StoreAndRetrieveService("InMemory");
-	
-	@Autowired
-    private Environment env;
-	
-	/**
-	 * This test is used to check if the spring profile is InMemory
-	*/ 
-	@Test
-    public void readProps() {
-        String value = env.getProperty("spring.profiles.active") ;
-        assertEquals("InMemory", value);
-    }
+	StoreAndRetrieve service=new StoreAndRetrieveInMemory();
+
 	
 	/**
 	   * This test is used to check if the stored numbers are retrieved correctly.
@@ -57,13 +43,12 @@ public class StoreAndRetrieveServiceTest {
 	   * @apiNote retrieveAndShuffleNumbersService
 	   * 
 	*/
-   @Test 
-   void retrieveAndShuffleNumbersService() throws IdNotFoundException {
-	   
-	   Integer counter=service.storeNumbersService(testString1);
-		assertEquals(0,counter);
-  
-		String retrievedString = service.retrieveAndShuffleNumbersService(0);
+	@Test
+	public void retrieveAndShuffleNumbersService() throws IdNotFoundException {
+
+		Integer counter = service.storeNumbersArray(testString1);
+
+		String retrievedString = service.retrieveAndShuffleNumbers(counter);
 		String[] responseArray = retrievedString.split(",");
 
 		String[] testStringArray = testString1.split(",");
@@ -76,8 +61,8 @@ public class StoreAndRetrieveServiceTest {
 				fail("Returned Shuffled string not same as Test String");
 			}
 		}
-  
-  }
+
+	}
    
    /**
 	   * This test is used to check if the id is returned correctly for a storeNumbersService().
@@ -87,11 +72,10 @@ public class StoreAndRetrieveServiceTest {
 	*/
    
    @Test
-	void storeNumbersServiceTest() {
-		
-		Integer counter=service.storeNumbersService(testString2);
-		assertEquals(1,counter);
+	public void storeNumbersServiceTest() {
+
+		Integer counter = service.storeNumbersArray(testString2);
+		assertEquals(1, counter);
 	}
 	 
-
 }

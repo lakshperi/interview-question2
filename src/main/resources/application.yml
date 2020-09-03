@@ -1,8 +1,10 @@
 server:
   port: 5000
 
+persistence:
+  store: database
+
 spring:
   profiles:
-    active: InMemory
-
+    active: h2
 

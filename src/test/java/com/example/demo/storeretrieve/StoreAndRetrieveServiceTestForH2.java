@@ -28,42 +28,30 @@ import com.example.demo.persistence.StoreRepository;
 
 /**
 * <h1>Services Test</h1>
-Tests the services layer with the spring profile of "InMemory". 
-*
+* Integration Tests the services layer with the spring profile of "InMemory" and Conditional bean of  
+* "persistence.store=database"
 * @author  Lakshmanan Perichiappan
 * @version 1.0
 * @since   09.02.2020 
 */
 
 @SpringBootTest(classes=DemoApplication.class)
-@ActiveProfiles({ "h2" })
 @TestPropertySource(properties = {
-	    "spring.profiles.active=h2",
+	    "persistence.store=database", "spring.profiles.active=h2",
 	})
 public class StoreAndRetrieveServiceTestForH2 {
 	
-	@Value("${spring.profiles.active}")
-	private String activeProfile;
-
 	String testString1="1,2,3,4";
 	String testString2="6,7,8,9";
 	
-	@Autowired
-	StoreAndRetrieveService service=new StoreAndRetrieveService("h2");
-	
-	@Autowired
-    private Environment env;
-	
 	/**
-	 * This test is used to check if the spring profile is InMemory
-	*/ 
-	@Test
-    public void readProps() {
-        String value = env.getProperty("spring.profiles.active") ;
-        assertEquals("h2", value);
-    }
+	 * This test calls the interface StoreAndRetrieve which is instantiated by the StoreAndRetrieveDb class
+	 * 
+	 */
+	@Autowired
+	StoreAndRetrieve service=new StoreAndRetrieveDb();
 	
-	 
+
 	/**
 	   * This test is used to check if the stored numbers are retrieved correctly.
 	   * First the storeNumbersService() is called followed by retrieveAndShuffleNumberService() methods which 
@@ -75,11 +63,11 @@ public class StoreAndRetrieveServiceTestForH2 {
 	   * 
 	*/
 	@Test
-	void retrieveAndShuffleNumbersService() throws IdNotFoundException {
+	public void retrieveAndShuffleNumbersService() throws IdNotFoundException {
 
-		Integer counter = service.storeNumbersService(testString1);
+		Integer counter = service.storeNumbersArray(testString1);
 
-		String retrievedString = service.retrieveAndShuffleNumbersService(counter);
+		String retrievedString = service.retrieveAndShuffleNumbers(counter);
 		String[] responseArray = retrievedString.split(",");
 
 		String[] testStringArray = testString1.split(",");
@@ -96,11 +84,11 @@ public class StoreAndRetrieveServiceTestForH2 {
 	}
    
 	@Test
-	void retrieveAndShuffleNumbersServiceSecond() throws IdNotFoundException {
+	public void retrieveAndShuffleNumbersServiceSecond() throws IdNotFoundException {
 
-		Integer counter = service.storeNumbersService(testString2);
+		Integer counter = service.storeNumbersArray(testString2);
 
-		String retrievedString = service.retrieveAndShuffleNumbersService(counter);
+		String retrievedString = service.retrieveAndShuffleNumbers(counter);
 		String[] responseArray = retrievedString.split(",");
 
 		String[] testStringArray = testString2.split(",");

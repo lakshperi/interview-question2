@@ -1,5 +1,9 @@
 server:
   port: 5000
+  
+persistence:
+  store: database
+  
 
 spring:
   datasource:

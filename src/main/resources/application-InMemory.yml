@@ -1,5 +1,12 @@
 server:
   port: 5000
 
+persistence:
+  store: InMemory
+
+spring:
+  profiles:
+    active: InMemory
+
 
 

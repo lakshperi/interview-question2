@@ -1,12 +1,8 @@
 package com.example.demo.persistence;
 
 import lombok.Data;
-
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -22,7 +18,6 @@ public class StoreEntity  {
     @Column(name="value")
     private String value;
      
-    //Setters and getters
  
     @Override
     public String toString() {

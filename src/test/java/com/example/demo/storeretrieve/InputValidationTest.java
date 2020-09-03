@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 * second to test the rainy day scenario
 * <p>
 * According to requirements only digits are allowed seperated by commas. 
-* The sunnyDayTest() unit tests the code with correct string which has all digits
+* The sunnyDayTest() unit tests the code with correct string which has all digits.
 * The rainyDayTest() unit tests the code with incorrect string which doesnt have digits 
 * and expects to get an exception
 * </p>
@@ -24,10 +24,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 */
 
 @SpringBootTest
-public class InputValidationControllerTest {
+public class InputValidationTest {
 	
 	String sunnyTestString="1,2,3,4";
-	String rainyTestString="ABCD";
+	String rainyTestString="ABCD,1,BD";
 	
 	/**
 	   * This method is used to test the sunny day scenario with digits
@@ -35,8 +35,8 @@ public class InputValidationControllerTest {
 	*/
 	@Test
 	public void sunnyDayTest() throws InputValidationException{
-		InputValidationController controller = new InputValidationController();
-		assertEquals(true, controller.checkStoreInputParams(sunnyTestString));
+		InputValidation validator = new InputValidation();
+		assertEquals(true, validator.checkInputParams(sunnyTestString));
 	}
 	
 	/**
@@ -48,8 +48,8 @@ public class InputValidationControllerTest {
 	
 	@Test(expected=InputValidationException.class)
 	public void rainyDayTest() throws InputValidationException  {
-		InputValidationController controller = new InputValidationController();
-		assertEquals(true, controller.checkStoreInputParams(rainyTestString));
+		InputValidation validator = new InputValidation();
+		assertEquals(true, validator.checkInputParams(rainyTestString));
 		
 	}
 
